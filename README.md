@@ -4,7 +4,8 @@ A production-style full-stack web application that scans prompts, code, and text
 ## 💡 Why I Built This
 
 In 2023, Samsung engineers accidentally leaked confidential source code and internal meeting notes by pasting them into ChatGPT — triggering a company-wide AI ban. As developers increasingly rely on AI tools for daily work, the risk of accidentally leaking API keys, passwords, and credentials into a prompt is very real.
-<img width="1917" height="903" alt="Screenshot 2026-08-25 171906" src="https://github.com/user-attachments/assets/cec22263-1b62-4631-a79f-6f625be5ed7a" />
+<img width="1891" height="837" alt="Screenshot 2026-09-17 123926" src="https://github.com/user-attachments/assets/e3882034-4e3a-4578-913b-200e8b8f6032" />
+
 <img width="1897" height="732" alt="Screenshot 2026-08-25 172026" src="https://github.com/user-attachments/assets/efd79dc6-2f26-4409-bf7b-c72d2ec356ab" />
 <img width="1893" height="811" alt="Screenshot 2026-08-25 172122" src="https://github.com/user-attachments/assets/497e3f75-a175-400f-9bd7-b01e7d09ab38" />
 
