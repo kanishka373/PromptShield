@@ -45,68 +45,35 @@ export default function Login() {
         }
 
         .ps-card {
-          width: 100%;
-          max-width: 420px;
-          height: 560px;
-          background: #090e1a;
-          border: 1px solid #00e676;
-          border-radius: 20px;
-          padding: 40px 32px;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          box-shadow: 0 0 30px rgba(0, 230, 118, 0.15);
-          position: relative;
+          width: 100%;   max-width: 420px;   height: 560px;   background: #090e1a;   border: 1px solid #00e676;  border-radius: 20px;   padding: 40px 32px; 
+            display: flex;   flex-direction: column; justify-content: center; box-shadow: 0 0 30px rgba(0, 230, 118, 0.15); position: relative;
           box-sizing: border-box;
         }
 
         .ps-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 32px;
+          display: flex;justify-content: space-between ; align-items: center; margin-bottom: 32px;
         }
 
         .ps-title {
-          font-size: 32px;
-          font-weight: 800;
-          color: #ffffff;
-          letter-spacing: 0.5px;
+          font-size: 32px; font-weight: 800;  color: #ffffff; letter-spacing: 0.5px;
         }
 
         .ps-badge {
-          width: 32px;
-          height: 32px;
-          background: #00e676;
-          border-radius: 8px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+          width: 32px;height: 32px; background: #00e676; border-radius: 8px; display: flex; align-items: center; justify-content: center;
           box-shadow: 0 0 12px rgba(0, 230, 118, 0.6);
         }
 
         .ps-badge svg {
-          width: 18px;
-          height: 18px;
-          fill: #050811;
+          width: 18px; height: 18px; fill: #050811;
         }
 
         .ps-field {
-          position: relative;
-          margin-bottom: 18px;
+          position: relative; margin-bottom: 18px;
         }
 
         .ps-input {
-          width: 100%;
-          background: #eef2ff;
-          border: none;
-          border-radius: 12px;
-          padding: 14px 44px 14px 18px;
-          font-size: 15px;
-          color: #1e293b;
-          outline: none;
-          box-sizing: border-box;
-          font-weight: 500;
+          width: 100%; background: #eef2ff; border: none; border-radius: 12px; padding: 14px 44px 14px 18px; font-size: 15px; color: #1e293b;
+          outline: none; box-sizing: border-box; font-weight: 500;
         }
 
         .ps-input::placeholder {
@@ -114,64 +81,34 @@ export default function Login() {
         }
 
         .ps-icon {
-          position: absolute;
-          right: 16px;
-          top: 50%;
-          transform: translateY(-50%);
-          width: 18px;
-          height: 18px;
-          fill: #64748b;
+          position: absolute;   right: 16px;   top: 50%;   transform: translateY(-50%);   width: 18px;   height: 18px;   fill: #64748b;
           pointer-events: none;
         }
 
         .ps-btn {
-          width: 100%;
-          background: #00e676;
-          color: #050811;
-          border: none;
-          border-radius: 12px;
-          padding: 14px;
-          font-size: 16px;
-          font-weight: 700;
-          cursor: pointer;
-          margin-top: 10px;
-          box-shadow: 0 0 20px rgba(0, 230, 118, 0.4);
-          transition: transform 0.2s, box-shadow 0.2s;
+          width: 100%;  background: #00e676;  color: #050811;  border: none;  border-radius: 12px;  padding: 14px;  font-size: 16px;
+          font-weight: 700;  cursor: pointer;  margin-top: 10px;  box-shadow: 0 0 20px rgba(0, 230, 118, 0.4);  transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .ps-btn:hover:not(:disabled) {
-          transform: translateY(-2px);
-          box-shadow: 0 0 28px rgba(0, 230, 118, 0.6);
+          transform: translateY(-2px); box-shadow: 0 0 28px rgba(0, 230, 118, 0.6);
         }
 
         .ps-btn:disabled {
-          opacity: 0.6;
-          cursor: not-allowed;
+          opacity: 0.6;cursor: not-allowed;
         }
 
         .ps-error {
-          background: rgba(255, 71, 87, 0.15);
-          border: 1px solid #ff4757;
-          color: #ff6b81;
-          padding: 10px;
-          border-radius: 8px;
-          font-size: 13px;
-          margin-bottom: 16px;
-          text-align: center;
+          background: rgba(255, 71, 87, 0.15); border: 1px solid #ff4757; color: #ff6b81; padding: 10px;border-radius: 8px;font-size: 13px;
+          margin-bottom: 16px; text-align: center;
         }
 
         .ps-footer {
-          margin-top: 36px;
-          text-align: center;
-          font-size: 14px;
-          color: #94a3b8;
+          margin-top: 36px; text-align: center; font-size: 14px; color: #94a3b8;
         }
 
         .ps-link {
-          color: #00e676;
-          font-weight: 700;
-          text-decoration: none;
-          margin-left: 6px;
+          color: #00e676; font-weight: 700; text-decoration: none; margin-left: 6px;
         }
 
         .ps-link:hover {

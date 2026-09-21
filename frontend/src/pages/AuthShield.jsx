@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { loginUser, registerUser } from '../services/api';
 import { useAuth } from '../context/AuthContext';
-import { ShieldHalf, Key, User, Lock, Mail, ShieldOff, Eye, EyeOff } from 'lucide-react';
+import { ShieldHalf, Key, User, Lock, Mail, ShieldOff, Eye, EyeOff , ArrowLeft} from 'lucide-react';
 function getPasswordStrength(password) {
   if (!password) return { label: '', score: 0, color: '' };
   let score = 0;
@@ -85,10 +85,20 @@ export default function AuthShield({ initialMode = 'login' }) {
 
   return (
     <div style={{
-      display: 'flex', justifyContent: 'center', alignItems: 'center',
-      minHeight: '100vh', width: '100vw', background: C.bg, overflow: 'hidden',
+      display: 'flex', justifyContent: 'center', alignItems: 'center',minHeight: '100vh', width: '100vw', background: C.bg, overflow: 'hidden',
       position: 'relative', fontFamily: "'Inter', sans-serif"
     }}>
+          <button
+        onClick={() => navigate('/')}
+        style={{
+          position: 'absolute', top: 25, left: 25, zIndex: 100, display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(0,255,136,0.25)',
+          borderRadius: 10, padding: '8px 14px', color: '#e4e4e7',fontSize: 13, fontWeight: 600, cursor: 'pointer', transition: '0.3s ease'
+        }}
+        onMouseEnter={e => { e.currentTarget.style.borderColor = C.green; e.currentTarget.style.boxShadow = '0 0 15px rgba(0,255,136,0.3)'; }}
+        onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(0,255,136,0.25)'; e.currentTarget.style.boxShadow = 'none'; }}
+      >
+        <ArrowLeft size={16} /> Back
+      </button>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
         @keyframes float{0%{transform:translate(0,0) scale(1)}100%{transform:translate(30px,-20px) scale(1.15)}}
@@ -148,7 +158,7 @@ export default function AuthShield({ initialMode = 'login' }) {
               <span className="as-sparkle" style={{bottom:'20%',right:'12%',animationDelay:'1.2s'}}></span>
               <span className="as-sparkle" style={{ top: '45%', left: '-5%', animationDelay: '0.6s' }}></span>
               <span className="as-sparkle" style={{ top: '50%', right: '-8%', animationDelay: '1s' }}></span> 
-              <ShieldHalf size={75} color={C.green} style={{ animation: 'pulseGlow 2.2s ease-in-out infinite', position: 'relative', zIndex: 1 }} />
+              <ShieldHalf size={130} color={C.green} style={{ animation: 'pulseGlow 2.2s ease-in-out infinite', position: 'relative', zIndex: 1 }} />
             </div>
             <span style={{
               color: '#e4e4e7', fontSize: 13, letterSpacing: 2, marginTop: 15, fontWeight: 600,
@@ -189,7 +199,7 @@ export default function AuthShield({ initialMode = 'login' }) {
             padding: '40px 30px', display: 'flex', flexDirection: 'column', justifyContent: 'center', boxSizing: 'border-box'
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-              <h2 style={{ color: '#fff', fontSize: 26, fontWeight: 700, letterSpacing: 1 }}>LOGIN</h2>
+              <h2 style={{ color: '#fff', fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 32, letterSpacing: 1 }}>LOGIN</h2>
               <button className="as-lock-btn" onClick={closeDoor} title="Close Shield"><ShieldOff size={20} /></button>
             </div>
 
@@ -227,7 +237,7 @@ export default function AuthShield({ initialMode = 'login' }) {
             padding: '35px 30px', display: 'flex', flexDirection: 'column', justifyContent: 'center', boxSizing: 'border-box'
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
-              <h2 style={{ color: '#fff', fontSize: 26, fontWeight: 700, letterSpacing: 1 }}>REGISTER</h2>
+              <h2 style={{ color: '#fff', fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: 32, letterSpacing: 1 }}>REGISTER</h2>
               <button className="as-lock-btn" onClick={closeDoor} title="Close Shield"><ShieldOff size={20} /></button>
             </div>
 

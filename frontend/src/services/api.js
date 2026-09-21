@@ -7,7 +7,7 @@ API.interceptors.request.use((config) => {
   if (user.token) config.headers.Authorization = `Bearer ${user.token}`;
   return config;
 });
-// 👇 YE NAYA ADD KARNA HAI 👇
+// 
 API.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -18,7 +18,7 @@ API.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-// 👆 YE NAYA ADD KARNA HAI 👆
+// 
 
 // Auth
 export const registerUser = (data) => API.post('/auth/register', data);
@@ -35,3 +35,4 @@ export const getHistory = () => API.get('/scans/history');
 export const deleteScan = (id) => API.delete(`/scans/${id}`);
 export const getSummary = () => API.get('/scans/summary');
 export const getPublicActivity = () => API.get('/scans/public-activity');
+export const getSafeDays = () =>API.get('/scans/safe-days');

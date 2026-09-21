@@ -82,13 +82,7 @@ const getPublicActivity = async (req, res) => {
       .select('secretsFound createdAt riskLevel');
 
     const typeLabels = {
-      apiKeys: 'API Key',
-      privateKeys: 'Private Key',
-      passwords: 'Password',
-      emails: 'Email',
-      jwtTokens: 'JWT Token',
-      phoneNumbers: 'Phone Number',
-      mongoURIs: 'DB URI',
+      apiKeys: 'API Key',privateKeys: 'Private Key',passwords: 'Password',emails: 'Email',jwtTokens: 'JWT Token',phoneNumbers: 'Phone Number',mongoURIs: 'DB URI',
       awsKeys: 'AWS Key',
     };
 
@@ -115,6 +109,35 @@ const getPublicActivity = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+const getSafeDays = async (req, res) => {
+  try {
+    const lastHighRisk = await Scan.findOne({ userId: req.user._id, riskLevel: 'High' })  .sort({ createdAt: -1 });
+    let safeDays;
+    let referenceDate;
 
-module.exports = { scanText, saveScan, getHistory, deleteScan, getSummary, getPublicActivity };
+    if (lastHighRisk) {
+      referenceDate = lastHighRisk.createdAt;
+    } else {
+      const firstScan = await Scan.findOne({ userId: req.user._id }).sort({ createdAt: 1 });
+      referenceDate = firstScan ? firstScan.createdAt : null;
+    }
+    if (referenceDate) {
+      const msPerDay = 1000 * 60 * 60 * 24;
+      const today=new Date();
+      today.setHours(0,0,0,0);
+      const refDay= new Date(referenceDate);
+      safeDays = Math.max(0, Math.floor((today.getTime() - refDay.getTime()) / msPerDay));
+    } else {
+      safeDays = 0;
+    }
+    res.json({
+      safeDays,
+      lastHighRiskDate: lastHighRisk ? lastHighRisk.createdAt : null,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports = { scanText, saveScan, getHistory, deleteScan, getSummary, getPublicActivity,getSafeDays };
  

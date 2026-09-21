@@ -1,37 +1,36 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell} from 'recharts';
 import Sidebar from '../components/Sidebar';
 import StatsCard from '../components/StatsCard';
-import { Search, Lock, AlertTriangle, CheckCircle2 } from 'lucide-react';
-import { getSummary, getHistory } from '../services/api';
+import { Search, Lock, AlertTriangle, CheckCircle2,Shield ,LayoutDashboard} from 'lucide-react';
+import { getSummary, getHistory, getSafeDays } from '../services/api';
 
 const PIE_COLORS = ['#ff4757', '#ffb020', '#00ff88'];
 
 const C = {
-  green: '#00ff88',
-  bg: '#080c10',
-  bg2: '#0d1117',
-  bg3: '#141b22',
-  border: 'rgba(0,255,136,0.18)',
-  text: '#c9d1d9',
-  textDim: '#8b949e',
+  green: '#00ff88', bg: '#080c10', bg2: '#0d1117', bg3: '#141b22', border: 'rgba(0,255,136,0.18)', text: '#c9d1d9', textDim: '#8b949e',
   red: '#ff4757',
 };
 
 export default function Dashboard() {
   const [summary, setSummary] = useState(null);
   const [history, setHistory] = useState([]);
+  const [safeDays, setSafeDays] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
   const navigate = useNavigate();
+  
 
   useEffect(() => {
     const load = async () => {
       try {
-        const [s, h] = await Promise.all([getSummary(), getHistory()]);
+        const [s, h,sd] = await Promise.all([getSummary(), getHistory(),getSafeDays()]);
         setSummary(s.data);
         setHistory(h.data.slice(0, 5));
+        setSafeDays(sd.data);
       } catch (err) {
         console.error(err);
       } finally {
@@ -61,7 +60,7 @@ export default function Dashboard() {
   }
 ;
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: C.bg, color: C.text, fontFamily: "'Inter', sans-serif", position: 'relative', overflow: 'hidden' }}>
+    <div style={{ display: 'flex', height: '100vh', background: C.bg, color: C.text, fontFamily: "'Inter', sans-serif", position: 'relative', overflow: 'hidden' }}>
       <style>{`
         @keyframes headingGlow{
           0%,100%{text-shadow:0 0 10px rgba(0,255,136,0.3),0 0 20px rgba(0,255,136,0.15)}
@@ -69,13 +68,16 @@ export default function Dashboard() {
         }
         .sc-glow-heading{
           color:#00ff88 !important;
-          animation:headingGlow 2.5s ease-in-out infinite;
+          animation:headingGlow 1.5s ease-in-out infinite;
         }
         @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@600;700&display=swap');
         @keyframes cardGlow{
           0%,100%{border-color:rgba(0,255,136,0.25);box-shadow:0 0 15px rgba(0,255,136,0.08)}
           50%{border-color:rgba(0,255,136,0.5);box-shadow:0 0 25px rgba(0,255,136,0.18)}
         }
+html,body{
+height:100%;margin:0;overflow:hidden;
+  scrollbar-gutter: stable;}
         .sc-card{background:${C.bg3};border:1px solid ${C.border};padding:1.5rem;position:relative;overflow:hidden;transition:all .25s;animation:cardGlow 3s ease-in-out infinite}
         .sc-card:hover{border-color:${C.green} !important;box-shadow:0 0 30px rgba(0,255,136,0.25) !important;animation-play-state:paused}
         .shiny-card::before{content:'';position:absolute;top:0;left:-150%;width:60%;height:100%;background:linear-gradient(120deg,transparent,rgba(0,255,136,0.15),transparent);transform:skewX(-20deg);transition:left 0.6s ease}
@@ -84,13 +86,15 @@ export default function Dashboard() {
         .sc-btn-primary:hover{background:#00cc6a;transform:translateY(-2px);box-shadow:0 0 25px rgba(0,255,136,0.45)}
         .sc-link{color:${C.green};font-family:'Share Tech Mono',monospace;font-size:0.8rem;background:none;border:none;cursor:pointer;letter-spacing:1px}
         .sc-link:hover{color:#fff}
-       .sc-table th{font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:2px;text-align:left;padding:0.9rem 1rem;border-bottom:2px solid ${C.green};background:rgba(0,255,136,0.04)}
+        .sc-neon-text-green{'color:#00ff88;text-shadow:0 0 5px #00ff88,0 0 10px #00ff88,0 0 20px #00ff88,0 0 40px #00b33c'}
+        .sc-table th{color:${C.green};font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:2px;text-align:left;padding:0.9rem 1rem;border-bottom:2px solid ${C.green};background:rgba(0,255,136,0.04)}
         .sc-table td{padding:0.8rem 1rem;border-bottom:1px solid rgba(0,255,136,0.08);font-size:0.85rem}
         .sc-table tr{transition:background 0.2s}
         .sc-table tr:hover td{background:${C.bg3}}
         @keyframes spin{to{transform:rotate(360deg)}}
         .sc-spinner{width:36px;height:36px;border:2px solid ${C.border};border-top-color:${C.green};border-radius:50%;animation:spin .8s linear infinite}
       `}
+      
       </style>
 
       {/* Grid background */}
@@ -106,14 +110,19 @@ export default function Dashboard() {
       <div style={{ position: 'relative', zIndex: 1, display: 'flex', width: '100%' }}>
         <Sidebar />
 
-        <main style={{ flex: 1, padding: '2rem', overflowY: 'auto' }}>
+        <main style={{ flex: 1, padding: '2rem', overflowY: 'auto' ,height:'100vh'}}>
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
 
             <div style={{ marginBottom: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
               <div>
-                <h1 className="sc-glow-heading" style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: '2rem', fontWeight: 700, marginBottom: '0.2rem' }}>Dashboard</h1>
-              </div>
-              <button onClick={() => navigate('/scanner')} className="sc-btn-primary">⚡ NEW SCAN</button>
+<h1 className="sc-glow-heading" style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: '2.6rem', marginBottom: '0.2rem', display: 'flex', alignItems: 'center', gap: '0.6rem' }}><LayoutDashboard size={30} color={C.green} /> Dashboard</h1>
+                <p style={{ 
+  color: '#00ff66',  fontSize: '1.3rem',  marginTop: '0.3rem', fontFamily: "'Orbitron', 'Inter', sans-serif",textShadow: '0 0 5px rgb(69, 164, 107), 0 0 10px #00ff66, 0 0 20px #00ff66, 0 0 40px #00b33c'
+}}>
+  Welcome back, <span style={{ fontWeight:600 }}>{user?.name || 'there'}</span>
+</p>
+</div>
+              <button onClick={() => navigate('/scanner')} className="sc-btn-primary"> NEW SCAN</button>
             </div>
 
             {loading ? (
@@ -122,6 +131,33 @@ export default function Dashboard() {
               </div>
             ) : (
               <>
+              {safeDays && (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    className="sc-card shiny-card"
+    style={{ marginBottom: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}
+  >
+    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+      <div style={{
+        width: 48, height: 48, borderRadius: '10px',background: 'rgba(0,255,136,0.1)', border: `1px solid ${C.border}`,display: 'flex', alignItems: 'center', justifyContent: 'center',
+        boxShadow: '0 0 15px rgba(0,255,136,0.2)', flexShrink: 0
+      }}>
+        <Shield size={24} color={C.green} strokeWidth={2} />
+      </div>
+      <div>
+        <div style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: '1.6rem', fontWeight: 700, color: C.green }}>
+          {safeDays.safeDays} Safe Days
+        </div>
+        <div style={{ color: C.textDim, fontSize: '0.8rem', fontFamily: "'Share Tech Mono', monospace" }}>
+          {safeDays.lastHighRiskDate
+            ? `Last high-risk scan: ${new Date(safeDays.lastHighRiskDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`
+            : 'No high-risk scans yet'}
+        </div>
+      </div>
+    </div>
+  </motion.div>
+)}
                 {/* Stats */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: '1.2rem', marginBottom: '2rem' }}>
                   <StatsCard icon={Search} label="Total Scans" value={summary?.total ?? 0} color="primary" delay={0} />
@@ -192,7 +228,7 @@ export default function Dashboard() {
                   </div>
                   {history.length === 0 ? (
                     <div style={{ textAlign: 'center', padding: '3rem 0', color: C.textDim }}>
-                      <div style={{ fontSize: '2.5rem', marginBottom: '0.8rem' }}>🔍</div>
+                      <div style={{ marginBottom: '0.8rem', display: 'flex', justifyContent: 'center' }}><Search size={40} color={C.textDim} /></div>
                       <p>No scans yet. <button onClick={() => navigate('/scanner')} className="sc-link" style={{ display: 'inline' }}>Run your first scan →</button></p>
                     </div>
                   ) : (

@@ -2,15 +2,10 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Sidebar from '../components/Sidebar';
 import { getHistory, deleteScan } from '../services/api';
+import { History as HistoryIcon, Eye, Trash2, Loader2, X, Copy, Check } from 'lucide-react';
 
 const C = {
-  green: '#00ff88',
-  bg: '#080c10',
-  bg2: '#0d1117',
-  bg3: '#141b22',
-  border: 'rgba(0,255,136,0.18)',
-  text: '#c9d1d9',
-  textDim: '#8b949e',
+  green: '#00ff88', bg: '#080c10', bg2: '#0d1117', bg3: '#141b22',border: 'rgba(0,255,136,0.18)',text: '#c9d1d9',textDim: '#8b949e',
 };
 
 const getRiskColors = (level) => {
@@ -24,9 +19,11 @@ const getRiskColors = (level) => {
 
 export default function History() {
   const [scans, setScans] = useState([]);
+  const [copied, setCopied] = useState('');
   const [loading, setLoading] = useState(true);
   const [viewScan, setViewScan] = useState(null);
   const [deleting, setDeleting] = useState(null);
+  const [filterMonth, setFilterMonth] = useState('');
 
   useEffect(() => {
     const load = async () => {
@@ -53,6 +50,22 @@ export default function History() {
       setDeleting(null);
     }
   };
+  const handleCopyText =(text,which)=>{
+    navigator.clipboard.writeText(text);
+    setCopied(which);
+    setTimeout(()=> setCopied(''),2000);
+  };
+  const monthOptions = [...new Set(scans.map(s => new Date(s.createdAt).toISOString().slice(0, 7)))]
+  .sort()
+  .reverse();
+
+const formatMonthLabel = (monthStr) => {
+  const [year, month] = monthStr.split('-');
+  return new Date(year, month - 1).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+};
+  const filteredScans = filterMonth
+  ? scans.filter(s => new Date(s.createdAt).toISOString().slice(0, 7) === filterMonth)
+  : scans;
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: C.bg, color: C.text, fontFamily: "'Inter', sans-serif", position: 'relative', overflow: 'hidden' }}>
@@ -72,12 +85,11 @@ export default function History() {
           50%{border-color:rgba(0,255,136,0.5);box-shadow:0 0 25px rgba(0,255,136,0.18)}
         }
         .sc-glow-panel{animation:cardGlow 3s ease-in-out infinite}
-        .sc-hist-table th{color;${C.green},font-family:'share Tech mono',monospace;font-size:0.7 rem;letter-spacing:2px;text-align:left;padding:1rem 1.2 rem;border-bottom:2px solid${C.green};background:rgba(0,255,136,0.04)}
+        .sc-hist-table th{color:${C.green};font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:2px;text-align:left;padding:1rem 1.2rem;border-bottom:2px solid ${C.green};background:rgba(0,255,136,0.04)}
         .sc-hist-table td{padding:0.9rem 1.2rem;border-bottom:1px solid rgba(0,255,136,0.08);font-size:0.85rem}
         .sc-hist-table tr{transition:background:0.2s}
         .sc-hist-table tr:hover td{background:rgba(0,255,136,0.05)}
-        .sc-action-btn{padding:0.4rem 0.8rem;font-size:0.7rem;font-family:'Share Tech Mono',monospace;letter-spacing:0.5px;cursor:pointer;transition:all .2s;background:transparent}
-        .sc-action-btn{border-radius:6px;font-weight:700}
+       .sc-action-btn{padding:0.4rem 0.9rem;font-size:0.7rem;font-family:'Share Tech Mono',monospace;letter-spacing:0.5px;cursor:pointer;transition:all .2s;background:transparent;border-radius:999px;font-weight:700}
 .sc-view-btn{color:${C.green};border:1px solid ${C.green};box-shadow:0 0 8px rgba(0,255,136,0.15)}
 .sc-view-btn:hover{background:rgba(0,255,136,0.12);box-shadow:0 0 18px rgba(0,255,136,0.5);transform:translateY(-1px)}
 .sc-delete-btn{color:#ff4757;border:1px solid #ff4757;box-shadow:0 0 8px rgba(255,71,87,0.15)}
@@ -101,17 +113,41 @@ export default function History() {
         <main style={{ flex: 1, padding: '2rem', overflowY: 'auto' }}>
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <div style={{ marginBottom: '2rem' }}>
-             <h1 className="sc-glow-heading" style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: '2rem', fontWeight: 700, marginBottom: '0.2rem' }}>Scan History</h1>
-              <p style={{ color: C.textDim, fontSize: '0.9rem' }}>All your previous scans — {scans.length} total</p>
+<h1 className="sc-glow-heading" style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: '2.6rem', marginBottom: '0.2rem', display: 'flex', alignItems: 'center', gap: '0.6rem' }}><HistoryIcon size={30} color={C.green} /> Scan History</h1>
+              <p style={{ color: C.textDim, fontSize: '0.9rem' }}>All your previous scans — {filteredScans.length} total</p>
             </div>
+            <div style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+  <select
+    value={filterMonth}
+    onChange={(e) => setFilterMonth(e.target.value)}
+    style={{
+      background: C.bg2, border: `1px solid ${C.border}`, color: filterMonth ? '#fff' : C.textDim,
+      padding: '0.55rem 1rem', borderRadius: '6px', fontSize: '0.85rem',
+      fontFamily: "'Inter', sans-serif", cursor: 'pointer', outline: 'none', minWidth: '180px'
+    }}
+  >
+    <option value="" style={{ background: C.bg2 }}>All Months</option>
+    {monthOptions.map(m => (
+      <option key={m} value={m} style={{ background: C.bg2 }}>{formatMonthLabel(m)}</option>
+    ))}
+  </select>
 
+  {filterMonth && (
+    <button
+      onClick={() => setFilterMonth('')}
+      style={{ background: 'none', border: `1px solid ${C.border}`, color: C.green, padding: '0.55rem 1rem', borderRadius: '6px', cursor: 'pointer', fontSize: '0.8rem' }}
+    >
+      Clear Filter
+    </button>
+  )}
+</div>
             {loading ? (
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '16rem' }}>
                 <div style={{ width: 36, height: 36, border: `2px solid ${C.border}`, borderTop: `2px solid ${C.green}`, borderRadius: '50%', animation: 'spin 0.8s linear infinite' }}></div>
               </div>
             ) : scans.length === 0 ? (
               <div className="sc-glow-panel" style={{ background: C.bg3, border: `1px solid ${C.border}`, padding: '4rem 2rem', textAlign: 'center' }}>
-                <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>📋</div>
+                <div style={{marginBottom:'1rem',display:'flex',justifyContent:'center',}}><HistoryIcon size={40} color={C.textDim}/></div>
                 <h3 style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: '1.3rem', fontWeight: 700, color: '#fff', marginBottom: '0.5rem' }}>No scans yet</h3>
                 <p style={{ color: C.textDim }}>Head to the Scanner to run your first scan</p>
               </div>
@@ -129,7 +165,7 @@ export default function History() {
                   </thead>
                   <tbody>
                     <AnimatePresence>
-                      {scans.map((scan, i) => {
+                      {filteredScans.map((scan, i) => {
                         const rc = getRiskColors(scan.riskLevel);
                         return (
                           <motion.tr key={scan._id}
@@ -228,11 +264,20 @@ export default function History() {
               </div>
 
               <div style={{ marginBottom: '1.2rem' }}>
+             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}></div>
                 <p style={{ fontSize: '0.7rem', color:'#fff', marginBottom: '0.5rem', fontFamily: "'Share Tech Mono', monospace", letterSpacing: '1px' }}>ORIGINAL TEXT</p>
+                <button onClick={() => handleCopyText(viewScan.originalText, 'original')} style={{ background: 'none', border: 'none', color: C.textDim, cursor: 'pointer', fontSize: '0.68rem', display: 'inline-flex', alignItems: 'center', gap: '4px', fontFamily: "'Share Tech Mono', monospace" }}>
+                        {copied === 'original' ? <><Check size={12} /> COPIED</> : <><Copy size={12} /> COPY</>}
+                </button>
                 <pre style={{ background: '#000', border: `1px solid ${C.border}`, padding: '1rem', fontSize: '0.75rem', fontFamily: "'Share Tech Mono', monospace", color: '#fff', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>{viewScan.originalText}</pre>
               </div>
               <div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}></div>
                 <p style={{ fontSize: '0.7rem', color: '#fff', marginBottom: '0.5rem', fontFamily: "'Share Tech Mono', monospace", letterSpacing: '1px' }}>MASKED TEXT</p>
+                <button onClick={()=> handleCopyText(viewScan.maskedText,'masked')} style={{background:'none',border:'none',color:C.textDim,cursor:'pointer',fontsize:'0.68rem',display:'inline-flex',alignItem:'center',gap:'4px',fontFamily:" 'Share Texh Mono',monospace"}}>
+                  {copied ==='masked' ?<><Check size={12} /> COPIED</>: <><Copy size={12} />COPY</>}
+                </button>
+
                 <pre style={{ background: 'rgba(0,255,136,0.04)', border: `1px solid ${C.border}`, padding: '1rem', fontSize: '0.75rem', fontFamily: "'Share Tech Mono', monospace", color: C.green, overflowX: 'auto', whiteSpace: 'pre-wrap' }}>{viewScan.maskedText}</pre>
               </div>
             </motion.div>

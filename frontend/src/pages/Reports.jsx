@@ -5,15 +5,15 @@ import jsPDF from 'jspdf';
 import Sidebar from '../components/Sidebar';
 import { getSummary, getHistory } from '../services/api';
 import { useAuth } from '../context/AuthContext';
-import { Search, Lock, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { Search, Lock, AlertTriangle, CheckCircle2 ,FileText,FileSpreadsheet,FileDown,Loader2} from 'lucide-react';
+
+const LABEL_MAP = {
+  apiKeys: 'API Keys',privateKeys: 'Private Keys',passwords: 'Passwords',emails: 'Emails',jwtTokens: 'JWT Tokens',phoneNumbers: 'Phone Numbers',mongoURIs: 'MongoDB URIs',
+  awsKeys: 'AWS Keys',
+};
 
 const C = {
-  green: '#00ff88',
-  bg: '#080c10',
-  bg2: '#0d1117',
-  bg3: '#141b22',
-  border: 'rgba(0,255,136,0.18)',
-  text: '#c9d1d9',
+  green: '#00ff88',bg: '#080c10',bg2: '#0d1117',bg3: '#141b22',border: 'rgba(0,255,136,0.18)',text: '#c9d1d9',
   textDim: '#8b949e',
 };
 
@@ -47,10 +47,9 @@ export default function Reports() {
     }
     return acc;
   }, {});
-
-  const detectionChartData = Object.entries(detectionTotals)
+const detectionChartData = Object.entries(detectionTotals)
     .filter(([, v]) => v > 0)
-    .map(([k, v]) => ({ name: k.replace(/([A-Z])/g, ' $1').trim(), count: v }));
+    .map(([k, v]) => ({ name: LABEL_MAP[k] || k, count: v }));
 
   const handleDownloadPDF = async () => {
     setGenerating(true);
@@ -58,26 +57,13 @@ export default function Reports() {
       const doc = new jsPDF();
       const now = new Date().toLocaleDateString();
 
-      doc.setFillColor(8, 12, 16);
-      doc.rect(0, 0, 210, 40, 'F');
-      doc.setTextColor(0, 255, 136);
-      doc.setFontSize(22);
-      doc.setFont('helvetica', 'bold');
-      doc.text('PromptShield', 15, 20);
-      doc.setFontSize(12);
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(200, 200, 200);
-      doc.text('Security Scan Report', 15, 30);
-      doc.text(`Generated: ${now}`, 140, 30);
-
-      doc.setTextColor(50, 50, 50);
-      doc.setFontSize(11);
+      doc.setFillColor(8, 12, 16);doc.rect(0, 0, 210, 40, 'F');doc.setTextColor(0, 255, 136);doc.setFontSize(22);
+      doc.setFont('helvetica', 'bold'); doc.text('PromptShield', 15, 20);doc.setFontSize(12);
+      doc.setFont('helvetica', 'normal');doc.setTextColor(200, 200, 200);doc.text('Security Scan Report', 15, 30);doc.text(`Generated: ${now}`, 140, 30);
+      doc.setTextColor(50, 50, 50);doc.setFontSize(11);
       doc.text(`Report for: ${user?.name} (${user?.email})`, 15, 52);
 
-      doc.setFillColor(240, 250, 245);
-      doc.rect(10, 60, 190, 55, 'F');
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(12);
+      doc.setFillColor(240, 250, 245); doc.rect(10, 60, 190, 55, 'F'); doc.setFont('helvetica', 'bold'); doc.setFontSize(12);
       doc.text('Summary Statistics', 15, 72);
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(10);
@@ -182,7 +168,7 @@ export default function Reports() {
         .sc-btn-outline:disabled{opacity:0.4;cursor:not-allowed}
         .sc-btn-primary{background:${C.green};color:${C.bg};padding:0.5rem 1.5rem;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:0.9rem;border:none;cursor:pointer;letter-spacing:1px;transition:all .2s;box-shadow:0 0 15px rgba(0,255,136,0.25)}
         .sc-btn-primary:hover:not(:disabled){background:#00cc6a;box-shadow:0 0 25px rgba(0,255,136,0.4)}
-        .sc-btn-primary:disabled{opacity:0.5;cursor:not-allowed}
+        .sc-btn-primary:disabled{opacity:1;background:#1a2b24;color:${C.textDim};box-shadow:none;cursor:not-allowed}
         .sc-report-card{background:${C.bg3};border:1px solid ${C.border};padding:1.2rem;transition:border-color .2s}
         .sc-report-card:hover{border-color:${C.green}}
       `}</style>
@@ -204,11 +190,11 @@ export default function Reports() {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <div style={{ marginBottom: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
               <div>
-                <h1 className="sc-glow-heading" style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: '2rem', fontWeight: 700, marginBottom: '0.2rem' }}>Reports</h1>
+               <h1 className="sc-glow-heading" style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700, fontSize: '2.6rem', marginBottom: '0.2rem', display: 'flex', alignItems: 'center', gap: '0.6rem' }}><FileText size={30} /> Reports</h1>
               </div>
               <div style={{ display: 'flex', gap: '0.75rem' }}>
                 <button onClick={handleExportCSV} disabled={loading || scans.length === 0} className="sc-btn-outline">
-                  📁 EXPORT CSV
+                  <FileSpreadsheet size={14} />EXPORT CSV
                 </button>
                 <button onClick={handleDownloadPDF} disabled={loading || generating || scans.length === 0} className="sc-btn-primary">
                   {generating ? (
@@ -216,7 +202,7 @@ export default function Reports() {
                       <span style={{ width: 14, height: 14, border: '2px solid rgba(8,12,16,0.3)', borderTop: `2px solid ${C.bg}`, borderRadius: '50%', display: 'inline-block', animation: 'spin 0.8s linear infinite' }} />
                       GENERATING...
                     </span>
-                  ) : '📄 DOWNLOAD PDF'}
+                  ) :<>< FileDown size={16} />DOWNLOAD PDF</>}
                 </button>
               </div>
             </div>
@@ -267,12 +253,12 @@ export default function Reports() {
                         <BarChart data={detectionChartData} layout="vertical">
                           <XAxis type="number" tick={{ fill: C.textDim, fontSize: 11 }} axisLine={false} tickLine={false} />
                           <YAxis type="category" dataKey="name" tick={{ fill: C.textDim, fontSize: 11 }} axisLine={false} tickLine={false} width={90} />
-                          <Tooltip contentStyle={{ background: C.bg2, border: `1px solid ${C.border}`, color: C.text, fontFamily: "'Share Tech Mono', monospace", fontSize: '0.75rem' }} />
+                          <Tooltip contentStyle={{ background: C.bg2, border: `1px solid ${C.border}`, color:C.text, fontFamily: "'Share Tech Mono', monospace", fontSize: '0.75rem' }} />
                           <Bar dataKey="count" fill={C.green} radius={[0, 0, 0, 0]} />
                         </BarChart>
                       </ResponsiveContainer>
                     ) : (
-                      <div style={{ height: '12rem', display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.textDim, fontSize: '0.85rem' }}>No detection data yet</div>
+                      <div style={{ height: '12rem', display: 'flex', alignItems: 'center', justifyContent: 'center', color:C.textDim, fontSize: '0.85rem' }}>No detection data yet</div>
                     )}
                   </div>
                 </div>

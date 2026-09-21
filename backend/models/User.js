@@ -20,8 +20,8 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, 'Password is required'],
-    minlength: 6
-  }
+    minlength: 6,
+  },
 }, { timestamps: true });
 
 userSchema.pre('save', async function (next) {
@@ -36,4 +36,3 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 };
 
 module.exports = mongoose.model('User', userSchema);
-
