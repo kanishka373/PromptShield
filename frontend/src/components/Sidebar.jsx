@@ -11,12 +11,7 @@ const navItems = [
 ];
 
 const C = {
-  green: '#00ff88',
-  bg: '#080c10',
-  bg2: '#0d1117',
-  border: 'rgba(0,255,136,0.18)',
-  text: '#c9d1d9',
-  textDim: '#8b949e',
+  green: '#00ff88',bg: '#080c10',bg2: '#0d1117',border: 'rgba(0,255,136,0.18)',text: '#c9d1d9',textDim: '#8b949e',
   red: '#ff4757',
 };
 
@@ -31,6 +26,8 @@ export default function Sidebar(){
         @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap');
         @keyframes sc-pulse{0%,100%{box-shadow:0 0 20px rgba(0,255,136,0.5),0 0 45px rgba(0,255,136,0.15)}50%{box-shadow:0 0 28px rgba(0,255,136,0.7),0 0 60px rgba(0,255,136,0.25)}}
         .sc-logo-box{animation:sc-pulse 3s ease-in-out infinite}
+        @keyframes sc-shield-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+.sc-shield-icon{animation:sc-shield-pulse 1.9s ease-in-out infinite}
         .sc-navlink{display:flex;align-items:center;gap:0.75rem;padding:0.75rem 1rem;font-size:0.85rem;font-family:'Inter',sans-serif;color:${C.textDim};text-decoration:none;transition:all .2s;border-left:2px solid transparent}
         .sc-navlink:hover{color:#fff;background:rgba(0,255,136,0.05);transform:translateX(4px)}
         .sc-navlink.active{color:${C.green};background:rgba(0,255,136,0.08);border-left:2px solid ${C.green};box-shadow:inset 0 0 20px rgba(0,255,136,0.06)}
@@ -40,13 +37,12 @@ export default function Sidebar(){
       <div style={{ padding: '1.5rem', borderBottom: `1px solid ${C.border}` }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <div className="sc-logo-box" style={{ width: 48, height: 48, display: 'flex', alignItems: 'center', justifyContent: 'center', color: C.bg, background: C.green }}>
-            <Shield size={24} strokeWidth={2.5} fill={C.bg} />
+            <Shield size={24} strokeWidth={2.5} fill={C.bg} className="sc-shield-icon" />
           </div>
           <div>
-            <h1 style={{ fontFamily: "'Share Tech Mono', monospace", fontSize: '1.15rem', color: C.green, letterSpacing: '1px' }}>
+            <h1 style={{ fontFamily: "'Rajdhani',sans-serif", fontSize: '1.15rem', color: C.green, letterSpacing: '2px',fontWeight:'400' }}>
               PROMPT<span style={{ color: C.textDim }}>SHIELD</span>
             </h1>
-            <p style={{ fontSize: '0.65rem', color: C.textDim, letterSpacing: '1px', marginTop: '2px' }}>// SECURE GATEWAY</p>
           </div>
         </div>
       </div>
@@ -76,18 +72,8 @@ export default function Sidebar(){
         <button 
           onClick={handleLogout} 
           style={{
-            width: '100%',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.6rem',
-            padding: '0.7rem 0.9rem',
-            fontSize: '0.8rem',
-            color: '#ff8a93',
-            background: 'rgba(255,71,87,0.06)',
-            border: '1px solid rgba(255,71,87,0.25)',
-            cursor: 'pointer',
-            letterSpacing: '0.5px',
-            fontFamily: "'Share Tech Mono', monospace",
+            width: '100%', display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '0.7rem 0.9rem', fontSize: '0.8rem', color: '#ff8a93',
+            background: 'rgba(255,71,87,0.06)', border: '1px solid rgba(255,71,87,0.25)', cursor: 'pointer', letterSpacing: '0.5px', fontFamily: "'Share Tech Mono', monospace",
             transition: 'all 0.25s ease',
           }}
           onMouseEnter={e => {

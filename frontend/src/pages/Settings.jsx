@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import { getProfile, updateProfile, changePassword, exportUserData, deleteAccount, getSummary } from '../services/api';
-import { User, Lock, Download, Trash2, Save, Eye, EyeOff } from 'lucide-react';
+import { User, Lock, Download, Trash2, Save, Eye, EyeOff, Settings as SettingsIcon } from 'lucide-react';
 
 const C = {
   green: '#00ff88',
@@ -160,7 +160,7 @@ export default function Settings() {
         <main style={{ flex: 1, padding: '2rem', overflowY: 'auto', maxWidth: '760px' }}>
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <div style={{ marginBottom: '2rem' }}>
-              <h1 className="sc-glow-heading" style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: '2rem', fontWeight: 700, marginBottom: '0.2rem' }}>Settings</h1>
+           <h1 className="sc-glow-heading " style={{ fontFamily: "'Rajdhani', sans-serif", fontWeight: 700,fontSize: '2.6rem', marginBottom: '0.2rem', display: 'flex', alignItems: 'center', gap: '0.6rem' }}><SettingsIcon size={30} /> Settings</h1>
               <p style={{ color: C.textDim, fontSize: '0.9rem' }}>Manage your account and preferences</p>
             </div>
 

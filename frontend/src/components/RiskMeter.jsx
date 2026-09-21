@@ -1,11 +1,8 @@
 import { motion } from 'framer-motion';
+import { Gauge } from 'lucide-react';
 
 const C = {
-  green: '#00ff88',
-  bg2: '#0d1117',
-  bg3: '#111820',
-  border: 'rgba(0,255,136,0.18)',
-  textDim: '#8b949e',
+  green: '#00ff88', bg2: '#0d1117', bg3: '#111820',border: 'rgba(0,255,136,0.18)',textDim: '#8b949e',
 };
 
 export default function RiskMeter({ score = 0, level = 'Low' }) {
@@ -15,7 +12,7 @@ export default function RiskMeter({ score = 0, level = 'Low' }) {
   return (
     <div style={{ background: C.bg3, border: `1px solid ${C.border}`, padding: '1.2rem' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-        <h3 style={{ fontFamily: "'Share Tech Mono', monospace", fontSize: '0.75rem', color: C.green, letterSpacing: '1px' }}>// RISK METER</h3>
+        <h3 style={{ fontFamily: "'Share Tech Mono', monospace", fontSize: '0.75rem', color: C.green, letterSpacing: '1px',display:'flex',alignItems:'center',gap:'6px' }}><Gauge size={14} color={C.green}/> RISK METER</h3>
         <span style={{
           padding: '0.2rem 0.7rem', fontSize: '0.7rem', fontWeight: 700,
           fontFamily: "'Share Tech Mono', monospace", letterSpacing: '1px',

@@ -1,137 +1,97 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 :root {
-  --bg-dark: #0A0A0F;
-  --bg-surface: #111118;
-  --bg-card: #16161F;
-  --bg-border: #1E1E2E;
-  --color-primary: #64ed3a;
-  --color-primary-rgb: 124, 58, 237;
-  --color-accent: #06d417;
-  --color-accent-rgb: 6, 182, 212;
+ --bg-dark: #0A0A0F;--bg-surface: #111118; --bg-card: #16161F; --bg-border: #1E1E2E; --color-primary: #64ed3a; --color-primary-rgb: 124, 58, 237;
+--color-accent: #06d417;
+ --color-accent-rgb: 6, 182, 212;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+ margin: 0;padding: 0;height: 100%;overflow-x: hidden;scrollbar-gutter: stable;
+}
+
+#root {
+ height: 100%;
+}
 
 body {
-  background: var(--bg-dark);
-  color: #E2E8F0;
-  font-family: 'Inter', sans-serif;
-  transition: background 0.3s ease;
-  overflow-y: scroll;
-  overflow-x: hidden;   /* 👈 ye line add kar */
+ background: var(--bg-dark);
+  color: #E2E8F0;font-family: 'Inter', sans-serif;transition: background 0.3s ease;overflow-y:auto;overflow-x: hidden; 
 }
 
 html {
-  overflow-x: hidden;   /* 👈 ye bhi add kar, extra safety ke liye */
+ overflow-x: hidden; 
 }
 ::-webkit-scrollbar { width: 10px; }
 ::-webkit-scrollbar-track { background: #080c10; }
 ::-webkit-scrollbar-thumb { 
-  background: #00ff88; 
-  border-radius: 10px; 
-  border: 2px solid #080c10;
+ background:#3a4a42;border-radius: 10px; border: 2px solid #080c10;
 }
 ::-webkit-scrollbar-thumb:hover { background: #00cc6a; }
 
 * {
-  scrollbar-width: thin;
-  scrollbar-color: #00ff88 #080c10;
+ scrollbar-width: thin; scrollbar-color: #3a4a42 #080c10;;
 }
 
 .glass {
-  background: rgba(22, 22, 31, 0.85);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(var(--color-primary-rgb), 0.15);
+background: rgba(22, 22, 31, 0.85); backdrop-filter: blur(20px);border: 1px solid rgba(var(--color-primary-rgb), 0.15);
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+ background: linear-gradient(135deg, var(--color-primary), var(--color-accent));-webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
 
 .glow-primary { box-shadow: 0 0 20px rgba(var(--color-primary-rgb), 0.4); }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--color-primary), color-mix(in srgb, var(--color-primary) 70%, black));
-  color: white;
-  padding: 0.6rem 1.5rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  transition: all 0.2s;
-  cursor: pointer;
-  border: none;
-  position: relative;
-  overflow: hidden;
+background: linear-gradient(135deg, var(--color-primary), color-mix(in srgb, var(--color-primary) 70%, black)); color: white;
+ padding: 0.6rem 1.5rem; border-radius: 0.5rem; font-weight: 600; transition: all 0.2s; cursor: pointer;border: none;
+ position: relative; overflow: hidden;
 }
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0 25px rgba(var(--color-primary-rgb), 0.6);
+transform: translateY(-2px);
+box-shadow: 0 0 25px rgba(var(--color-primary-rgb), 0.6);
 }
 
 .btn-outline {
-  background: transparent;
-  color: var(--color-primary);
-  padding: 0.6rem 1.5rem;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  border: 1px solid var(--color-primary);
-  transition: all 0.2s;
-  cursor: pointer;
+ background: transparent;color: var(--color-primary);padding: 0.6rem 1.5rem;border-radius: 0.5rem;font-weight: 600;border: 1px solid var(--color-primary);
+ transition: all 0.2s; cursor: pointer;
 }
 .btn-outline:hover {
-  background: rgba(var(--color-primary-rgb), 0.1);
+ background: rgba(var(--color-primary-rgb), 0.1);
 }
 
 .input-field {
-  background: rgba(22,22,31,0.9);
-  border: 1px solid var(--bg-border);
-  color: #E2E8F0;
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
-  width: 100%;
-  font-size: 0.95rem;
-  transition: border-color 0.2s;
-  outline: none;
+ background: rgba(22,22,31,0.9);border: 1px solid var(--bg-border);
+ color: #E2E8F0;padding: 0.75rem 1rem;border-radius: 0.5rem;width: 100%;font-size: 0.95rem;transition: border-color 0.2s;outline: none;
 }
 .input-field:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.15);
+border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.15);
 }
 .input-field::placeholder { color: #4B5563; }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+ 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); }
 }
 .float { animation: float 4s ease-in-out infinite; }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 5px rgba(var(--color-primary-rgb), 0.3); }
-  50% { box-shadow: 0 0 25px rgba(var(--color-primary-rgb), 0.7); }
+ 0%, 100% { box-shadow: 0 0 5px rgba(var(--color-primary-rgb), 0.3); }50% { box-shadow: 0 0 25px rgba(var(--color-primary-rgb), 0.7); }
 }
 .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
-
-@keyframes shine {
-  0% { left: -100%; }
-  100% { left: 200%; }
+.font-heading {
+  font-family: 'Pacifico', cursive;letter-spacing: 0.5px;
 }
-.shine-btn {
-  position: relative;
-  overflow: hidden;
+@keyframes shine {
+ 0% { left: -100%; } 100% { left: 200%; }
+}
+.shine-btn { position: relative; overflow: hidden;
 }
 .shine-btn::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 60%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-  transform: skewX(-20deg);
+ content: ''; position: absolute; top: 0; left: -100%; width: 60%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+ transform: skewX(-20deg);
 }
-.shine-btn:hover::after { animation: shine 0.6s ease; }
+.shine-btn:hover::after { animation: shine 0.6s ease; }  
