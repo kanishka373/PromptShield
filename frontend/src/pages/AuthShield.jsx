@@ -158,7 +158,7 @@ export default function AuthShield({ initialMode = 'login' }) {
               <span className="as-sparkle" style={{bottom:'20%',right:'12%',animationDelay:'1.2s'}}></span>
               <span className="as-sparkle" style={{ top: '45%', left: '-5%', animationDelay: '0.6s' }}></span>
               <span className="as-sparkle" style={{ top: '50%', right: '-8%', animationDelay: '1s' }}></span> 
-              <ShieldHalf size={130} color={C.green} style={{ animation: 'pulseGlow 2.2s ease-in-out infinite', position: 'relative', zIndex: 1 }} />
+              <ShieldHalf size={80} color={C.green} style={{ animation: 'pulseGlow 2.2s ease-in-out infinite', position: 'relative', zIndex: 1 }} />
             </div>
             <span style={{
               color: '#e4e4e7', fontSize: 13, letterSpacing: 2, marginTop: 15, fontWeight: 600,
