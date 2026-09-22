@@ -8,7 +8,7 @@ const scanSchema = new mongoose.Schema({
   },
   originalText: {
     type: String,
-    required: true
+    default: ''
   },
   maskedText: {
     type: String,
