@@ -120,7 +120,113 @@ The app will be available at `http://localhost:5173`.
 - You can delete your account and all associated data at any time from Settings.
 
 ---
+## 🏗️ Architecture
+flowchart TD
 
+subgraph group_client["Client Application"]
+  node_app_routes["App Routes<br/>[AppRoutes.jsx]"]
+  node_landing["Landing Demo<br/>[Landing.jsx]"]
+  node_auth_shield["Auth Shield<br/>[AuthShield.jsx]"]
+  node_auth_context["Auth Context<br/>[AuthContext.jsx]"]
+  node_scanner["Scanner<br/>[Scanner.jsx]"]
+  node_dashboard["Dashboard<br/>[Dashboard.jsx]"]
+  node_history["History<br/>[History.jsx]"]
+  node_reports["Reports<br/>[Reports.jsx]"]
+  node_settings["Settings<br/>[Settings.jsx]"]
+  node_api_client["API Client<br/>[api.js]"]
+end
+
+subgraph group_api["API Security"]
+  node_server["Express Server<br/>[server.js]"]
+  node_auth_routes["Auth Routes<br/>[authRoutes.js]"]
+  node_scan_routes["Scan Routes<br/>[scanRoutes.js]"]
+  node_auth_controller["Auth Controller<br/>[authController.js]"]
+  node_scan_controller["Scan Controller<br/>[scanController.js]"]
+  node_auth_middleware["JWT Middleware<br/>[authMiddleware.js]"]
+end
+
+subgraph group_engine["Scan Engine"]
+  node_secret_detector["Secret Detector<br/>[secretDetector.js]"]
+  node_masking_engine["Masking Engine<br/>[maskingEngine.js]"]
+  node_risk_calculator["Risk Calculator<br/>[riskCalculator.js]"]
+end
+
+subgraph group_data["Persistence"]
+  node_user_model["User Model<br/>[User.js]"]
+  node_scan_model["Scan Store<br/>[Scan.js]"]
+  node_mongodb[("MongoDB")]
+end
+
+node_user(("User"))
+node_scan_result["Masked Scan Result"]
+
+node_user -->|"opens app"| node_app_routes
+node_app_routes -->|"routes public"| node_landing
+node_app_routes -->|"routes auth"| node_auth_shield
+node_app_routes -->|"protects scanner"| node_scanner
+node_app_routes -->|"protects dashboard"| node_dashboard
+node_app_routes -->|"protects history"| node_history
+node_app_routes -->|"protects reports"| node_reports
+node_app_routes -->|"protects settings"| node_settings
+node_auth_shield -->|"submits credentials"| node_api_client
+node_auth_shield -->|"stores session"| node_auth_context
+node_scanner -->|"submits text"| node_api_client
+node_dashboard -->|"loads summaries"| node_api_client
+node_history -->|"loads history"| node_api_client
+node_reports -.->|"requests reports"| node_api_client
+node_settings -->|"manages account"| node_api_client
+node_api_client -->|"calls API"| node_server
+node_server -->|"dispatches auth"| node_auth_routes
+node_server -->|"dispatches scans"| node_scan_routes
+node_auth_routes -->|"invokes auth"| node_auth_controller
+node_scan_routes -->|"invokes scans"| node_scan_controller
+node_auth_routes -->|"protects routes"| node_auth_middleware
+node_scan_routes -->|"protects routes"| node_auth_middleware
+node_auth_controller -->|"reads writes users"| node_user_model
+node_auth_controller -->|"manages user scans"| node_scan_model
+node_auth_middleware -->|"loads user"| node_user_model
+node_scan_controller -->|"detects secrets"| node_secret_detector
+node_scan_controller -->|"masks matches"| node_masking_engine
+node_scan_controller -->|"calculates risk"| node_risk_calculator
+node_scan_controller -->|"saves reads scans"| node_scan_model
+node_scan_controller -->|"returns result"| node_scan_result
+node_scan_model -->|"persists scans"| node_mongodb
+node_user_model -->|"persists users"| node_mongodb
+
+click node_app_routes "https://github.com/kanishka373/promptshield/blob/main/frontend/src/routes/AppRoutes.jsx"
+click node_landing "https://github.com/kanishka373/promptshield/blob/main/frontend/src/pages/Landing.jsx"
+click node_auth_shield "https://github.com/kanishka373/promptshield/blob/main/frontend/src/pages/AuthShield.jsx"
+click node_auth_context "https://github.com/kanishka373/promptshield/blob/main/frontend/src/context/AuthContext.jsx"
+click node_scanner "https://github.com/kanishka373/promptshield/blob/main/frontend/src/pages/Scanner.jsx"
+click node_dashboard "https://github.com/kanishka373/promptshield/blob/main/frontend/src/pages/Dashboard.jsx"
+click node_history "https://github.com/kanishka373/promptshield/blob/main/frontend/src/pages/History.jsx"
+click node_reports "https://github.com/kanishka373/promptshield/blob/main/frontend/src/pages/Reports.jsx"
+click node_settings "https://github.com/kanishka373/promptshield/blob/main/frontend/src/pages/Settings.jsx"
+click node_api_client "https://github.com/kanishka373/promptshield/blob/main/frontend/src/services/api.js"
+click node_server "https://github.com/kanishka373/promptshield/blob/main/backend/server.js"
+click node_auth_routes "https://github.com/kanishka373/promptshield/blob/main/backend/routes/authRoutes.js"
+click node_scan_routes "https://github.com/kanishka373/promptshield/blob/main/backend/routes/scanRoutes.js"
+click node_auth_controller "https://github.com/kanishka373/promptshield/blob/main/backend/controllers/authController.js"
+click node_scan_controller "https://github.com/kanishka373/promptshield/blob/main/backend/controllers/scanController.js"
+click node_auth_middleware "https://github.com/kanishka373/promptshield/blob/main/backend/middleware/authMiddleware.js"
+click node_secret_detector "https://github.com/kanishka373/promptshield/blob/main/backend/utils/secretDetector.js"
+click node_masking_engine "https://github.com/kanishka373/promptshield/blob/main/backend/utils/maskingEngine.js"
+click node_risk_calculator "https://github.com/kanishka373/promptshield/blob/main/backend/utils/riskCalculator.js"
+click node_user_model "https://github.com/kanishka373/promptshield/blob/main/backend/models/User.js"
+click node_scan_model "https://github.com/kanishka373/promptshield/blob/main/backend/models/Scan.js"
+
+classDef toneNeutral fill:#f8fafc,stroke:#334155,stroke-width:1.5px,color:#0f172a
+classDef toneBlue fill:#dbeafe,stroke:#2563eb,stroke-width:1.5px,color:#172554
+classDef toneAmber fill:#fef3c7,stroke:#d97706,stroke-width:1.5px,color:#78350f
+classDef toneMint fill:#dcfce7,stroke:#16a34a,stroke-width:1.5px,color:#14532d
+classDef toneRose fill:#ffe4e6,stroke:#e11d48,stroke-width:1.5px,color:#881337
+classDef toneIndigo fill:#e0e7ff,stroke:#4f46e5,stroke-width:1.5px,color:#312e81
+classDef toneTeal fill:#ccfbf1,stroke:#0f766e,stroke-width:1.5px,color:#134e4a
+class node_app_routes,node_landing,node_auth_shield,node_auth_context,node_scanner,node_dashboard,node_history,node_reports,node_settings,node_api_client,node_user toneBlue
+class node_server,node_auth_routes,node_scan_routes,node_auth_controller,node_scan_controller,node_auth_middleware toneAmber
+class node_secret_detector,node_masking_engine,node_risk_calculator toneMint
+class node_user_model,node_scan_model,node_mongodb toneRose
+class node_scan_result toneIndigo
 ## 🚀 Future Improvements
 
 - Browser extension for real-time scanning inside ChatGPT/Claude's input box
