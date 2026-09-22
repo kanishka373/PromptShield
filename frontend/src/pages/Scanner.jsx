@@ -24,6 +24,7 @@ const C = {
 export default function Scanner() {
   const [inputText, setInputText] = useState('');
   const [fileName, setFileName] = useState('');
+  const [showSaveModal, setShowSaveModal] = useState(false);
   const fileInputRef = useRef(null);
   const [scannedText, setScannedText] = useState('');
   const [result, setResult] = useState(null);
@@ -80,12 +81,16 @@ export default function Scanner() {
     showToast('✓ Data masked successfully');
   };
 
-  const handleSave = async () => {
+  const handleSaveClick = async () => {
     if (!result) return showToast('⚠ Run a scan first');
+     setShowSaveModal(true); 
+  };
+  const confirmSave = async(includeOriginal) =>{
+    setShowSaveModal(false);
     setSaving(true);
     try {
       await saveScan({
-        originalText: scannedText,
+        originalText: includeOriginal ? scannedText: '',
         maskedText: result.maskedText,
         secretsFound: result.detectedSecrets,
         totalSecretsFound: result.totalSecretsFound,
@@ -186,7 +191,7 @@ export default function Scanner() {
     <Upload size={14} /> UPLOAD FILE
   </button>
               <button onClick={handleMask} disabled={!result} className="sc-btn-outline" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Shuffle size={14} /> MASK DATA</button>
-              <button onClick={handleSave} disabled={!result || saving || saved} className="sc-btn-outline"
+              <button onClick={handleSaveClick} disabled={!result || saving || saved} className="sc-btn-outline"
                 style={{ borderColor: saved ? 'rgba(0,255,136,0.4)' : undefined, color: saved ? C.green : undefined }}>
                   {saving ? <><Loader2 size={14} className="sc-spin" /> SAVING...</> : saved ? <><Check size={14} /> SAVED</> : <><Save size={14} /> SAVE SCAN</>}
               </button>
@@ -299,6 +304,37 @@ export default function Scanner() {
           </div>
         </main>
       </div>
+      <AnimatePresence>
+        {showSaveModal && (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.7)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 100 }}
+            onClick={() => setShowSaveModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              style={{ background: C.bg3, border: `1px solid ${C.border}`, borderRadius: '10px', padding: '2rem', maxWidth: '420px', textAlign: 'center' }}
+            >
+              <h3 style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: '1.3rem', fontWeight: 700, color: '#fff', marginBottom: '0.8rem' }}>
+                Save original text too?
+              </h3>
+              <p style={{ color: C.textDim, fontSize: '0.85rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+                By default, only the masked (safe) version is saved. Saving the original keeps your unmasked secrets in the database — only do this if you're sure.
+              </p>
+              <div style={{ display: 'flex', gap: '0.8rem', justifyContent: 'center' }}>
+                <button onClick={() => confirmSave(false)} className="sc-btn-primary">
+                  No, masked only
+                </button>
+                <button onClick={() => confirmSave(true)} className="sc-btn-outline">
+                  Yes, save both
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
-  );
-}
+  )
+};
+     

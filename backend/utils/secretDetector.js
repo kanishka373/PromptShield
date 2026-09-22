@@ -2,7 +2,7 @@ const patterns = {
   apiKeys: [
     /sk[_-](proj[_-])?[a-zA-Z0-9_-]{20,}/g,
     /AIza[0-9A-Za-z\-_]{35}/g,
-    /\b(api[_-]?key|access[_-]?token|auth[_-]?token)\s*[:=]\s*["']?[a-zA-Z0-9_\-]{20,}["']?/gi,
+    /(api[_-]?key|access[_-]?token|auth[_-]?token)\w*\s*[:=]\s*["']?[a-zA-Z0-9_\-]{20,}["']?/gi,
     /ghp_[a-zA-Z0-9]{36}/g,
     /gho_[a-zA-Z0-9]{36}/g,
     /xoxb-[0-9]{11}-[0-9]{11}-[a-zA-Z0-9]{24}/g,
@@ -19,11 +19,11 @@ const patterns = {
     /-----BEGIN (RSA |EC |DSA |OPENSSH )?PRIVATE KEY-----[\s\S]*?-----END (RSA |EC |DSA |OPENSSH )?PRIVATE KEY-----/g
   ],
 passwords: [
-  /\bpassword\s*[:=]\s*["']?[^\s"']{6,}["']?/gi,
-  /\bpasswd\s*[:=]\s*["']?[^\s"']{6,}["']?/gi,
-  /\bpwd\s*[:=]\s*["']?[^\s"']{6,}["']?/gi,
-  /\bclient[_-]?secret\s*[:=]\s*["']?[^\s"']{8,}["']?/gi,
-  /\b(api[_-]?key|app[_-]?key|access[_-]?key|auth[_-]?token|secret[_-]?key)\s*[:=]\s*["']?[^\s"']{8,}["']?/gi,
+  /password\w*\s*[:=]\s*["']?[^\s"']{6,}["']?/gi,
+  /passwd\w*\s*[:=]\s*["']?[^\s"']{6,}["']?/gi,
+  /pwd\w*\s*[:=]\s*["']?[^\s"']{6,}["']?/gi,
+  /client[_-]?secret\w*\s*[:=]\s*["']?[^\s"']{8,}["']?/gi,
+  /(api[_-]?key|app[_-]?key|access[_-]?key|auth[_-]?token|secret[_-]?key)\w*\s*[:=]\s*["']?[^\s"']{8,}["']?/gi,
   /\b[A-Z][A-Z0-9_]*(KEY|TOKEN|SECRET|PASSWORD)\s*[:=]\s*["']?[^\s"']{6,}["']?/g,
 ],
   emails: [
@@ -33,8 +33,8 @@ passwords: [
     /eyJ[a-zA-Z0-9\-_]+\.[a-zA-Z0-9\-_]+\.[a-zA-Z0-9\-_]*/g
   ],
   phoneNumbers: [
-    /\b(phone|mobile|contact|whatsapp|cell|tel)\s*[:=]\s*["']?(\+?91[\s\-]?)?[6-9]\d{9}["']?/gi,
-    /\b(phone|mobile|contact|whatsapp|cell|tel)\s*[:=]\s*["']?(\+1[\s\-]?)?\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{4}["']?/gi,
+    /(phone|mobile|contact|whatsapp|cell|tel)\w*\s*[:=]\s*["']?(\+?91[\s\-]?)?[6-9]\d{9}["']?/gi,
+    /(phone|mobile|contact|whatsapp|cell|tel)\w*\s*[:=]\s*["']?(\+1[\s\-]?)?\(?\d{3}\)?[\s\-]?\d{3}[\s\-]?\d{4}["']?/gi,
   ],
   mongoURIs: [
     /mongodb(\+srv)?:\/\/[^\s"'`]+/g,
@@ -50,19 +50,9 @@ passwords: [
 };
 const detectSecrets = (text) => {
   const results = {
-    apiKeys: [],
-    privateKeys: [],
-    passwords: [],
-    emails: [],
-    jwtTokens: [],
-    phoneNumbers: [],
-    mongoURIs: [],
-    awsKeys: []
+    apiKeys: [], privateKeys: [], passwords: [], emails: [], jwtTokens: [], phoneNumbers: [], mongoURIs: [],awsKeys: []
   };
 
-  // High-signal / structured patterns checked FIRST.
-  // Once a range of text is claimed by one of these, lower-signal
-  // patterns (email, phone, password) can't re-match inside it.
   const priorityOrder = ['privateKeys', 'mongoURIs', 'awsKeys', 'jwtTokens', 'apiKeys', 'passwords', 'emails', 'phoneNumbers'];
   const claimedRanges = [];
 
@@ -83,6 +73,7 @@ const detectSecrets = (text) => {
           found.add(match[0]);
           claimedRanges.push({ start, end });
         }
+        if (match.index === re.lastIndex) re.lastIndex++;
       }
     }
     results[type] = [...found];
