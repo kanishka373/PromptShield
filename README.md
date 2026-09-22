@@ -121,6 +121,8 @@ The app will be available at `http://localhost:5173`.
 
 ---
 ## 🏗️ Architecture
+
+```mermaid
 flowchart TD
 
 subgraph group_client["Client Application"]
@@ -193,40 +195,18 @@ node_scan_controller -->|"returns result"| node_scan_result
 node_scan_model -->|"persists scans"| node_mongodb
 node_user_model -->|"persists users"| node_mongodb
 
-click node_app_routes "https://github.com/kanishka373/promptshield/blob/main/frontend/src/routes/AppRoutes.jsx"
-click node_landing "https://github.com/kanishka373/promptshield/blob/main/frontend/src/pages/Landing.jsx"
-click node_auth_shield "https://github.com/kanishka373/promptshield/blob/main/frontend/src/pages/AuthShield.jsx"
-click node_auth_context "https://github.com/kanishka373/promptshield/blob/main/frontend/src/context/AuthContext.jsx"
-click node_scanner "https://github.com/kanishka373/promptshield/blob/main/frontend/src/pages/Scanner.jsx"
-click node_dashboard "https://github.com/kanishka373/promptshield/blob/main/frontend/src/pages/Dashboard.jsx"
-click node_history "https://github.com/kanishka373/promptshield/blob/main/frontend/src/pages/History.jsx"
-click node_reports "https://github.com/kanishka373/promptshield/blob/main/frontend/src/pages/Reports.jsx"
-click node_settings "https://github.com/kanishka373/promptshield/blob/main/frontend/src/pages/Settings.jsx"
-click node_api_client "https://github.com/kanishka373/promptshield/blob/main/frontend/src/services/api.js"
-click node_server "https://github.com/kanishka373/promptshield/blob/main/backend/server.js"
-click node_auth_routes "https://github.com/kanishka373/promptshield/blob/main/backend/routes/authRoutes.js"
-click node_scan_routes "https://github.com/kanishka373/promptshield/blob/main/backend/routes/scanRoutes.js"
-click node_auth_controller "https://github.com/kanishka373/promptshield/blob/main/backend/controllers/authController.js"
-click node_scan_controller "https://github.com/kanishka373/promptshield/blob/main/backend/controllers/scanController.js"
-click node_auth_middleware "https://github.com/kanishka373/promptshield/blob/main/backend/middleware/authMiddleware.js"
-click node_secret_detector "https://github.com/kanishka373/promptshield/blob/main/backend/utils/secretDetector.js"
-click node_masking_engine "https://github.com/kanishka373/promptshield/blob/main/backend/utils/maskingEngine.js"
-click node_risk_calculator "https://github.com/kanishka373/promptshield/blob/main/backend/utils/riskCalculator.js"
-click node_user_model "https://github.com/kanishka373/promptshield/blob/main/backend/models/User.js"
-click node_scan_model "https://github.com/kanishka373/promptshield/blob/main/backend/models/Scan.js"
-
 classDef toneNeutral fill:#f8fafc,stroke:#334155,stroke-width:1.5px,color:#0f172a
 classDef toneBlue fill:#dbeafe,stroke:#2563eb,stroke-width:1.5px,color:#172554
 classDef toneAmber fill:#fef3c7,stroke:#d97706,stroke-width:1.5px,color:#78350f
 classDef toneMint fill:#dcfce7,stroke:#16a34a,stroke-width:1.5px,color:#14532d
 classDef toneRose fill:#ffe4e6,stroke:#e11d48,stroke-width:1.5px,color:#881337
 classDef toneIndigo fill:#e0e7ff,stroke:#4f46e5,stroke-width:1.5px,color:#312e81
-classDef toneTeal fill:#ccfbf1,stroke:#0f766e,stroke-width:1.5px,color:#134e4a
 class node_app_routes,node_landing,node_auth_shield,node_auth_context,node_scanner,node_dashboard,node_history,node_reports,node_settings,node_api_client,node_user toneBlue
 class node_server,node_auth_routes,node_scan_routes,node_auth_controller,node_scan_controller,node_auth_middleware toneAmber
 class node_secret_detector,node_masking_engine,node_risk_calculator toneMint
 class node_user_model,node_scan_model,node_mongodb toneRose
 class node_scan_result toneIndigo
+```
 ## 🚀 Future Improvements
 
 - Browser extension for real-time scanning inside ChatGPT/Claude's input box
