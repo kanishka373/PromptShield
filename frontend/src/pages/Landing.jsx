@@ -46,7 +46,7 @@ function ParticleNetwork() {
     let w, h, particles, animationId;
     const mouse = { x: -9999, y: -9999 };
     const DPR = Math.min(window.devicePixelRatio || 1, 2);
-    const LINK = 130;
+    const LINK = 150;
  
     function resize() {
       w = window.innerWidth;
@@ -56,7 +56,7 @@ function ParticleNetwork() {
       const count = Math.min(120, Math.floor((w * h) / 16000));
       particles = Array.from({ length: count }, () => ({
         x: Math.random() * w,   y: Math.random() * h,   vx: (Math.random() - 0.5) * 0.35,   vy: (Math.random() - 0.5) * 0.35,
-        r: Math.random() * 3 + 2,
+        r: Math.random() * 1 + 1.9,
       }));
     }
  
@@ -85,7 +85,7 @@ function ParticleNetwork() {
           if (d2 < LINK * LINK) {
             const alpha = (1 - Math.sqrt(d2) / LINK) * 0.28;
             ctx.strokeStyle = `rgba(0,255,157,${alpha})`;
-            ctx.lineWidth = 1;
+            ctx.lineWidth = 0.6;
             ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
           }
         }
