@@ -36,86 +36,31 @@ function demoScan(text) {
   return { found, masked, score, riskLevel };
 }
 
-/* ---------- Premium auto-drift particle network background ---------- */
-function ParticleNetwork() {
-  const canvasRef = useRef(null);
- 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    let w, h, particles, animationId;
-    const mouse = { x: -9999, y: -9999 };
-    const DPR = Math.min(window.devicePixelRatio || 1, 2);
-    const LINK = 150;
- 
-    function resize() {
-      w = window.innerWidth;
-      h = window.innerHeight;
-      canvas.width = w * DPR;canvas.height = h * DPR;
-      canvas.style.width = w + 'px'; canvas.style.height = h + 'px'; ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-      const count = Math.min(120, Math.floor((w * h) / 16000));
-      particles = Array.from({ length: count }, () => ({
-        x: Math.random() * w,   y: Math.random() * h,   vx: (Math.random() - 0.5) * 0.35,   vy: (Math.random() - 0.5) * 0.35,
-        r: Math.random() * 1 + 1.9,
-      }));
-    }
- 
-    function tick() {
-      ctx.clearRect(0, 0, w, h);
-      for (const p of particles) {
-        p.x += p.vx; p.y += p.vy;
-        const dx = p.x - mouse.x, dy = p.y - mouse.y;
-        const d2 = dx * dx + dy * dy;
-        if (d2 < 120 * 120 && d2 > 0.01) {
-          const d = Math.sqrt(d2);
-          const f = ((120 - d) / 120) * 0.6;
-          p.x += (dx / d) * f;p.y += (dy / d) * f;
-        }
-        if (p.x < -20) p.x = w + 20;
-        if (p.x > w + 20) p.x = -20;
-        if (p.y < -20) p.y = h + 20;
-        if (p.y > h + 20) p.y = -20;
-      }
-      for (let i = 0; i < particles.length; i++) {
-        const a = particles[i];
-        for (let j = i + 1; j < particles.length; j++) {
-          const b = particles[j];
-          const dx = a.x - b.x, dy = a.y - b.y;
-          const d2 = dx * dx + dy * dy;
-          if (d2 < LINK * LINK) {
-            const alpha = (1 - Math.sqrt(d2) / LINK) * 0.28;
-            ctx.strokeStyle = `rgba(0,255,157,${alpha})`;
-            ctx.lineWidth = 0.6;
-            ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
-          }
-        }
-      }
-      for (const p of particles) {
-        const near = Math.abs(p.x - mouse.x) < 140 && Math.abs(p.y - mouse.y) < 140;
-        ctx.fillStyle = near ? 'rgba(92,232,255,0.95)' : 'rgba(0,255,157,0.75)';ctx.beginPath();ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fill();
-      }
-      animationId = requestAnimationFrame(tick);
-    }
- 
-    function onMove(e) { mouse.x = e.clientX; mouse.y = e.clientY; }
-    function onLeave() { mouse.x = -9999; mouse.y = -9999; }
- 
-    resize();
-    tick();
-    window.addEventListener('resize', resize);
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('mouseout', onLeave);
- 
-    return () => {
-      cancelAnimationFrame(animationId);
-      window.removeEventListener('resize', resize); window.removeEventListener('mousemove', onMove); window.removeEventListener('mouseout', onLeave);
-    };
-  }, []);
- return <canvas ref={canvasRef} style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', opacity: 0.7 }} />;
-}
- 
+/* ---------- Premium blinking dots background ---------- */
+function BlinkingDots({ count = 80 }) {
+  const dots = Array.from({ length: count }, (_, i) => ({
+    id: i,
+    top: Math.random() * 100,
+    left: Math.random() * 100,
+    size: Math.random() * 4 + 1.5,
+    delay: Math.random() * 4,
+    duration: Math.random() * 10+8,
+  }));
 
+  return (
+    <div style={{ position: 'fixed', inset: 0, zIndex: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+      {dots.map(d => (
+        <div
+          key={d.id}
+          style={{
+            position: 'absolute', top: `${d.top}%`, left: `${d.left}%`, width: d.size, height: d.size, borderRadius: '50%', background: '#00ff9d',
+            boxShadow: '0 0 6px 1px rgba(0,255,157,0.6)', animation: `dotBlink ${d.duration}s ease-in-out ${d.delay}s infinite`,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
 function HighlightedMasked({ text, green }) {
   const parts = text.split(/(\[[A-Z0-9_]+_MASKED(?:_\d+)?\])/g);
   return parts.map((p, i) =>
@@ -242,6 +187,7 @@ export default function Landing() {
         @keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
         @keyframes shineSweep { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+      @keyframes dotBlink { 0%, 100% { opacity: 0.1; } 50% { opacity: 0.9; }}
         @keyframes scanSweepY { 0% { top: -15%; } 100% { top: 110%; } }
         .sc-shine-text {
           background: linear-gradient(90deg, #00ff9d 0%, #00ff9d 40%, #ffffff 50%, #00ff9d 60%, #00ff9d 100%); background-size: 200% auto;
@@ -303,8 +249,8 @@ export default function Landing() {
         .demo-grid { display:grid; grid-template-columns: 1fr; }
         @media (min-width: 900px) { .demo-grid { grid-template-columns: 1fr 1fr; } }
       `}</style>
-
-      <ParticleNetwork />
+    
+      <BlinkingDots count={80} />
 
       <div style={{ position: 'relative', zIndex: 1 }}>
 
