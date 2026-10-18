@@ -45,7 +45,7 @@ function BlinkingDots({ count = 80 }) {
     size: Math.random() * 4 + 1.5,
     delay: Math.random() * 4,
     duration: Math.random() * 10+8,
-  }));
+    }));
 
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 0, overflow: 'hidden', pointerEvents: 'none' }}>
@@ -143,7 +143,7 @@ export default function Landing() {
     { icon: ScanSearch, title: '20+ Secret Detectors', desc: 'OpenAI & Anthropic keys, AWS creds, GitHub/Slack/Stripe tokens, JWTs, private key blocks, DB URIs, hardcoded passwords, PII and more.', tag: 'DETECTION' },
     { icon: EyeOff, title: 'Instant Masking', desc: 'Every hit is swapped for a readable placeholder like [JWT_MASKED], so your prompt stays useful — and harmless.', tag: 'MASKING' },
     { icon: Gauge, title: 'Weighted Risk Scoring', desc: 'JWT or MongoDB URI? +50. API key? +40. Password? +30. Get a Low / Medium / High verdict with a 0–100 score.', tag: 'SCORING' },
-    { icon: History, title: 'Scan History', desc: 'Every scan is archived with its findings. Re-open any scan to compare original vs masked side-by-side.', tag: 'AUDIT' },
+    { icon: History, title: 'Scan History', desc: 'Every saved scan keeps its masked copy, risk score and findings. Re-open any scan from your history..', tag: 'AUDIT' },
     { icon: FileText, title: 'PDF & CSV Reports', desc: 'Export compliance-ready PDF reports per scan, or dump your entire history to CSV for audits.', tag: 'REPORTS' },
     { icon: Lock, title: 'Private by Design', desc: 'The landing demo runs 100% client-side. Saved scans live under your JWT-protected account — deletable at any time.', tag: 'SECURITY' },
   ];
@@ -151,12 +151,12 @@ export default function Landing() {
   const steps = [
     { n: '01', title: 'Paste your prompt', desc: "Code, configs, logs — anything you're about to send to an LLM." },
     { n: '02', title: 'We scan & score', desc: '20+ regex detectors sweep for secrets and weight the risk in under a millisecond.' },
-    { n: '03', title: 'Copy the safe copy', desc: 'Secrets become [MASKED] placeholders. Paste it anywhere with zero exposure.' },
+    { n: '03', title: 'Copy the safe copy', desc: 'Secrets become [MASKED] placeholders. Paste the masked copy into any AI tool.' },
   ];
 
   const faqs = [
     { q: 'what exactly does PromptShield detect?', a: 'Over 20 secret formats: OpenAI, Anthropic, Google, Stripe, SendGrid and npm keys, GitHub & Slack tokens, AWS credentials, JWTs, RSA/EC/OpenSSH private key blocks, MongoDB/Postgres/MySQL/Redis connection URIs, generic KEY/TOKEN/SECRET env assignments, hardcoded passwords, plus emails and phone numbers.' },
-    { q: 'Does the Demo send my text to server?', a: 'No. The landing-page demo runs the detection engine entirely in your browser using plain regex — zero network calls. Only when you explicitly press "Save to History" inside the dashboard does the scan get stored under your account.' },
+    { q: 'Does the demo send my text to a server?', a: 'No. The landing-page demo runs entirely in your browser using plain regex, with zero network calls. Inside the dashboard, the Scanner does send your text to the server to scan it, and saving a scan stores the masked copy, not your raw text.' },
     { q: 'Is my data stored anywhere?', a: 'The live demo on this page runs entirely in your browser — nothing is sent to a server. Data is only stored if you create an account and save scans to your history.' },
     { q: 'Which AI tools does this work with?', a: 'PromptShield works with any AI tool — ChatGPT, Claude, Gemini, or others. Scan and mask your prompt before pasting it anywhere.' },
     { q: 'Does it ever produce false positives?', a: "It's a regex-based detection engine, so it may occasionally miss edge cases or flag something incorrectly. Always double-check the masked output before sending." },
@@ -291,10 +291,10 @@ export default function Landing() {
               <span className="sc-cursor" style={{ color: C.green }}>|</span> automatically
             </div>
             <p style={{ maxWidth: '560px', margin: '0 auto 2.5rem', color: C.textDim, fontSize: '1rem', lineHeight: 1.7, fontFamily: "'Inter', sans-serif" }}>
-  PromptShield sits between your code and any AI — scanning and masking <span style={{ color: C.green }}>API keys, passwords & PII</span> before they ever leave your machine.
+  PromptShield sits between your code and any AI — scanning and masking <span style={{ color: C.green }}>API keys, passwords & PII</span>before you paste them into any AI tool.
 </p>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginBottom: '2rem', color: C.textDim, fontSize: '0.85rem', fontFamily: "'Share Tech Mono', monospace" }}>
-  <Lock size={14} color={C.green} /> Your data stays private — nothing is sent anywhere without your consent
+  <Lock size={14} color={C.green} /> The live demo runs in your browser — nothing is sent to a server
 </div>
                         
             <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '3rem' }}>
@@ -608,7 +608,7 @@ export default function Landing() {
   <span style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: C.textDim, fontSize: '0.85rem', fontFamily: "'Inter', sans-serif" }}>
     <Lock size={14} color={C.green} /> No credit card required </span>
   <span style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: C.textDim, fontSize: '0.85rem', fontFamily: "'Inter', sans-serif" }}>
-    <ShieldCheck size={14} color={C.green} /> Your data is never shared with third parties </span>
+    <ShieldCheck size={14} color={C.green} /> Saved scans keep only the masked copy </span>
   <span style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', color: C.textDim, fontSize: '0.85rem', fontFamily: "'Inter', sans-serif" }}>
     <EyeOff size={14} color={C.green} /> Delete your data anytime, no questions asked  </span>
 </div>
