@@ -8,6 +8,7 @@ const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
     if (!name || !email || !password) return res.status(400).json({ message: 'All fields required' });
+    if (password.length < 8) return res.status(400).json({ message: 'Password must be at least 8 characters' });
     const exists = await User.findOne({ email });
     if (exists) return res.status(400).json({ message: 'Email already registered' });
     const user = await User.create({ name, email, password });
@@ -56,7 +57,7 @@ const changePassword = async (req, res) => {
   try {
     const { currentPassword, newPassword } = req.body;
     if (!currentPassword || !newPassword) return res.status(400).json({ message: 'Both fields required' });
-    if (newPassword.length < 6) return res.status(400).json({ message: 'New password must be at least 6 characters' });
+    if (newPassword.length < 8) return res.status(400).json({ message: 'New password must be at least 8 characters' });
 
     const user = await User.findById(req.user._id);
     const isMatch = await user.matchPassword(currentPassword);

@@ -21,8 +21,8 @@ const scanText = async (req, res) => {
 
 const saveScan = async (req, res) => {
   try {
-    const { originalText, maskedText, secretsFound, totalSecretsFound, riskScore, riskLevel } = req.body;
-    const scan = await Scan.create({ userId: req.user._id, originalText, maskedText, secretsFound, totalSecretsFound, riskScore, riskLevel });
+   const { maskedText, secretsFound, totalSecretsFound, riskScore, riskLevel } = req.body;
+const scan = await Scan.create({ userId: req.user._id, maskedText, secretsFound, totalSecretsFound, riskScore, riskLevel });
     res.status(201).json(scan);
   } catch (err) {
     res.status(500).json({ message: err.message });

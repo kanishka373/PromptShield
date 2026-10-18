@@ -10,6 +10,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.set('trust proxy', 1);
 app.use(helmet());
 
 const scanLimiter = rateLimit({
@@ -18,12 +19,20 @@ const scanLimiter = rateLimit({
   message: { message: 'Too many scan requests, please try again in a minute.' }
 });
 
-app.use('/api/scan', scanLimiter);
+app.use('/api/scans/scan', scanLimiter);
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 10,
+  message: { message: 'Too many attempts, try again after 15 minutes.' }
+});
+
+app.use('/api/auth/login', authLimiter);
+app.use('/api/auth/register', authLimiter);
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/scans', require('./routes/scanRoutes'));
 
 app.get('/', (req, res) => {
-  res.json({ message: 'PromptShield API Running ✅' });
+  res.json({ message: 'PromptShield API Running ' });
 });
 
 const PORT = process.env.PORT || 5000;
