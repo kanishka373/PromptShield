@@ -59,8 +59,8 @@ export default function AuthShield({ initialMode = 'login' }) {
     if (!signupForm.name || !signupForm.email || !signupForm.password) {
       return setError('All fields are required');
     }
-    if (signupForm.password.length < 6) {
-      return setError('Password must be at least 6 characters');
+    if (signupForm.password.length < 8) {
+      return setError('Password must be at least 8 characters');
     }
     if (signupForm.password !== signupForm.confirm) {
       return setError('Passwords do not match');
@@ -120,12 +120,8 @@ export default function AuthShield({ initialMode = 'login' }) {
   50% { opacity: 1; transform: scale(1); }
 }
 .as-sparkle {
-  position: absolute;
-  width: 3px;
-  height: 3px;
-  background: ${C.green};
-  border-radius: 50%;
-  box-shadow: 0 0 8px 3px rgba(0,255,136,0.6);
+  position: absolute; width: 3px; height: 3px;
+  background: ${C.green}; border-radius: 50%; box-shadow: 0 0 8px 3px rgba(0,255,136,0.6);
   animation: twinkle 2.5s ease-in-out infinite;
 }
         .as-orb{position:absolute;width:450px;height:450px;background:radial-gradient(circle,rgba(0,255,136,0.25),transparent 70%);filter:blur(100px);animation:float 6s ease-in-out infinite alternate}

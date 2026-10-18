@@ -85,12 +85,11 @@ export default function Scanner() {
     if (!result) return showToast('⚠ Run a scan first');
      setShowSaveModal(true); 
   };
-  const confirmSave = async(includeOriginal) =>{
+  const confirmSave = async() =>{
     setShowSaveModal(false);
     setSaving(true);
     try {
       await saveScan({
-        originalText: includeOriginal ? scannedText: '',
         maskedText: result.maskedText,
         secretsFound: result.detectedSecrets,
         totalSecretsFound: result.totalSecretsFound,
@@ -236,7 +235,7 @@ export default function Scanner() {
                   <span style={{ fontSize: '0.75rem', color: C.green, fontFamily: "'Share Tech Mono', monospace", display: 'flex', alignItems: 'center', gap: '6px' }}><Check size={14} /> SHOWING MASKED OUTPUT — SAFE TO USE</span>
 <div style={{ display: 'flex', gap: '1rem' }}>
   <button onClick={handleCopy} style={{ background: 'none', border: 'none', fontSize: '0.75rem', color: C.green, cursor: 'pointer', fontFamily: "'Share Tech Mono', monospace", display: 'inline-flex', alignItems: 'center', gap: '4px' }}><Copy size={14} /> COPY</button>
-  <button onClick={() => setShowMasked(false)} style={{ background: 'none', border: 'none', fontSize: '0.75rem', color: C.textDim, cursor: 'pointer', fontFamily: "'Share Tech Mono', monospace" }}>SHOW ORIGINAL</button>
+  <button onClick={() => {setInputText(scannedText);setShowMasked(false)} }style={{ background: 'none', border: 'none', fontSize: '0.75rem', color: C.textDim, cursor: 'pointer', fontFamily: "'Share Tech Mono', monospace" }}>SHOW ORIGINAL</button>
 </div>
                 </div>
               )}
@@ -317,17 +316,17 @@ export default function Scanner() {
               style={{ background: C.bg3, border: `1px solid ${C.border}`, borderRadius: '10px', padding: '2rem', maxWidth: '420px', textAlign: 'center' }}
             >
               <h3 style={{ fontFamily: "'Rajdhani', sans-serif", fontSize: '1.3rem', fontWeight: 700, color: '#fff', marginBottom: '0.8rem' }}>
-                Save original text too?
+                               Save to history?
               </h3>
               <p style={{ color: C.textDim, fontSize: '0.85rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-                By default, only the masked (safe) version is saved. Saving the original keeps your unmasked secrets in the database — only do this if you're sure.
+                 Only the masked (safe) version is saved. Your original text is never stored.
               </p>
               <div style={{ display: 'flex', gap: '0.8rem', justifyContent: 'center' }}>
-                <button onClick={() => confirmSave(false)} className="sc-btn-primary">
-                  No, masked only
+                 <button onClick={confirmSave} className="sc-btn-primary">
+                  Save
                 </button>
-                <button onClick={() => confirmSave(true)} className="sc-btn-outline">
-                  Yes, save both
+                <button onClick={() => setShowSaveModal(false)} className="sc-btn-outline">
+                  Cancel
                 </button>
               </div>
             </motion.div>

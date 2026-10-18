@@ -262,15 +262,6 @@ const formatMonthLabel = (monthStr) => {
                   <p style={{ fontSize: '0.7rem', color: C.textDim, fontFamily: "'Share Tech Mono', monospace" }}>SECRETS FOUND</p>
                 </div>
               </div>
-
-              <div style={{ marginBottom: '1.2rem' }}>
-             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}></div>
-                <p style={{ fontSize: '0.7rem', color:'#fff', marginBottom: '0.5rem', fontFamily: "'Share Tech Mono', monospace", letterSpacing: '1px' }}>ORIGINAL TEXT</p>
-                <button onClick={() => handleCopyText(viewScan.originalText, 'original')} style={{ background: 'none', border: 'none', color: C.textDim, cursor: 'pointer', fontSize: '0.68rem', display: 'inline-flex', alignItems: 'center', gap: '4px', fontFamily: "'Share Tech Mono', monospace" }}>
-                        {copied === 'original' ? <><Check size={12} /> COPIED</> : <><Copy size={12} /> COPY</>}
-                </button>
-                <pre style={{ background: '#000', border: `1px solid ${C.border}`, padding: '1rem', fontSize: '0.75rem', fontFamily: "'Share Tech Mono', monospace", color: '#fff', overflowX: 'auto', whiteSpace: 'pre-wrap' }}>{viewScan.originalText}</pre>
-              </div>
               <div>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}></div>
                 <p style={{ fontSize: '0.7rem', color: '#fff', marginBottom: '0.5rem', fontFamily: "'Share Tech Mono', monospace", letterSpacing: '1px' }}>MASKED TEXT</p>

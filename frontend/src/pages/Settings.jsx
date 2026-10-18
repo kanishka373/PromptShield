@@ -72,7 +72,7 @@ export default function Settings() {
     e.preventDefault();
     setPwMsg({ type: '', text: '' });
     if (!pwForm.currentPassword || !pwForm.newPassword) return setPwMsg({ type: 'error', text: 'All fields are required' });
-    if (pwForm.newPassword.length < 6) return setPwMsg({ type: 'error', text: 'New password must be at least 6 characters' });
+    if (pwForm.newPassword.length < 8) return setPwMsg({ type: 'error', text: 'New password must be at least 8 characters' });
     if (pwForm.newPassword !== pwForm.confirm) return setPwMsg({ type: 'error', text: 'Passwords do not match' });
     setSavingPw(true);
     try {
@@ -232,7 +232,7 @@ export default function Settings() {
                           {showPw ? <EyeOff size={16} /> : <Eye size={16} />}
                         </button>
                       </div>
-                      <p style={{ fontSize: '0.72rem', color: C.textDim, marginTop: '0.4rem' }}>Minimum 6 characters</p>
+                      <p style={{ fontSize: '0.72rem', color: C.textDim, marginTop: '0.4rem' }}>Minimum 8 characters</p>
                     </div>
                     <div style={{ marginBottom: '1.3rem' }}>
                       <label className="sc-label">CONFIRM NEW PASSWORD</label>
