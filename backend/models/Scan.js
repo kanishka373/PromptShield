@@ -6,16 +6,14 @@ const scanSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
-  originalText: {
-    type: String,
-    default: ''
-  },
+
   maskedText: {
     type: String,
     required: true
   },
   secretsFound: {
     apiKeys: { type: Number, default: 0 },
+    privateKeys: { type: Number, default: 0 },
     passwords: { type: Number, default: 0 },
     emails: { type: Number, default: 0 },
     jwtTokens: { type: Number, default: 0 },
